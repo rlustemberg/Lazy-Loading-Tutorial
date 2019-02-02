@@ -1,0 +1,16 @@
+<Alloy>
+	<TabGroup onFocus="focusHandler">
+		<Tab title="Tab1">
+			<Require id="window1" src="/windowController1"></Require>
+		</Tab>
+		<Tab title="Tab2">
+			<Require id="window2" src="/windowController2"></Require>
+		</Tab>
+		<Tab title="Tab3">
+			<Require id="window3" src="/windowController3"></Require>
+		</Tab>
+		<Tab title="Tab4">
+			<Require id="windo41" src="/windowController4"></Require>
+		</Tab>
+	</TabGroup>
+</Alloy>

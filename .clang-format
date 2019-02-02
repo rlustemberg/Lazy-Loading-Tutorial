@@ -1,0 +1,5 @@
+Language:        JavaScript
+BasedOnStyle:  LLVM
+ColumnLimit:     100
+AllowShortFunctionsOnASingleLine: None
+AllowShortIfStatementsOnASingleLine: false

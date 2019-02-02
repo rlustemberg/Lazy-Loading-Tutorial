@@ -1,0 +1,6 @@
+<Alloy>
+	<Window id="window" onFocus="openHandler">
+		<ActivityIndicator id="actInd" message="loading..." color="brown"></ActivityIndicator>
+		<!--<Require id="heavy" src="/heavyController"></Require>-->
+	</Window>
+</Alloy>
