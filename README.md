@@ -6,7 +6,7 @@ A complex Titanium mobile application implemented using the Alloy mvc framework 
 
 ### The cause
 
-The Alloy framework 'eager loads' the UI objects declared it's index.xml view file. These include all controllers, widgets, models and collections included in index.xml or child controllers declared on it. It means that all the UI objects and all initialization code on the controllers, is run as soon as the alloy.js file has finished it's execution.
+The Alloy framework 'eager loads' the UI objects declared it's index.xml view file. These involves all controllers, widgets, models and collections included in index.xml or child controllers declared on it. It means that all the UI objects and all initialization code on the controllers, is run as soon as the alloy.js file has finished it's execution.
 All of these code, including UI objects allocation, any business logic invoked when initializing controllers, is run on a single thread, causing a bottleneck. Therefore it'll stay waiting in the execution queue until it's time is due.
 No wonder that as the application grows in complexity, longer startup times will be the result unless we address this issue.
 
@@ -41,7 +41,7 @@ No wonder that as the application grows in complexity, longer startup times will
 </Alloy>
  ```
 
-Each one of these controllers instantiate the 'heavyController', which upon initialization it performs cpu intensive cryptographic iterations (using the PBKDF2 algorithm). This implementation of the PBKDF2 algorithm in plain javascript has abysmal performance and it suite us perfectly for reproducing the effect of io and thread blocking code on application responsiveness.
+Each one of these controllers instantiate the 'heavyController', which upon initialization it performs cpu intensive cryptographic iterations (using the PBKDF2 algorithm). This implementation of the PBKDF2 algorithm in plain javascript has abysmal performance and it suits us perfectly for reproducing the effect of io and thread blocking code on application responsiveness.
 
 #### Benchmarking
 
@@ -61,14 +61,40 @@ function focusHandler(e) {
 }
 ```
 
-The application startup time is around 8 seconds! (running on an iPhone Xs simulator, Macbook Pro 2015, i7, etc, etc)
+The application startup time is around 8 seconds! (running on an iPhone Xs simulator, Macbook Pro 2015, i7, etc, etc).
+
+By the way, this is what `$.heavyController` is doing
+```javascript
+// Arguments passed into this controller can be accessed via the `$.args` object
+// directly or:
+const {args} = $, CryptoJS = require('/pbkdf2');
+(function constructor() {
+
+  const salt = CryptoJS.lib.WordArray.random(128 / 8);
+  console.debug('salt', salt.toString());
+  const key128Bits = CryptoJS.PBKDF2("Secret Passphrase", salt, {keySize : 128 / 32});
+  console.debug('key128Bits', key128Bits.toString());
+  const key256Bits = CryptoJS.PBKDF2("Secret Passphrase", salt, {keySize : 256 / 32});
+  console.debug('key256Bits', key256Bits.toString());
+  const key512Bits = CryptoJS.PBKDF2("Secret Passphrase", salt, {keySize : 512 / 32});
+  console.debug('key512Bits', key512Bits.toString());
+  const key512Bits1000Iterations =
+      CryptoJS.PBKDF2("Secret Passphrase", salt, {keySize : 512 / 32, iterations : 30000});
+  console.debug('key512Bits1000Iterations', key512Bits1000Iterations.toString());
+  $.trigger('initialisation:ready');
+})();
+function alert(message) {
+  console.log(message)
+}
+exports.alert = alert;
+```
 
 ### The solution
 
 To counter 'eager loading' we implement it's opossite: 'lazy loading'. What is lazy loading?
 >Lazy loading is a design pattern commonly used in computer programming to defer initialization of an object until the point at which it is needed
 
-We will lazy load the 'heavyController' in the attempt reduce startup time.
+We will lazy load the 'heavyController' in an attempt reduce startup time.
 Within the Alloy framework, we do it by no longer declaring the controller on the view xml file, but by instantiating the child controller on the parent's controller file, and adding it to the view hierarchy, on demand.
 
 windowController1.xml (and 2,3,4)
@@ -137,5 +163,5 @@ View lifecycle events (ie. open, focus, layout events) or user interaction  can 
 Please bear in mind that you need to ensure that any dependencies on the lazy loaded object need to be taken into account in order to avoid race conditions.
 Asynchronous invocation of events might cause the controller to be called after the view has been deallocated, leading to application crashes.
 
-#### reference
-The files for this article can be found at [https://github.com/rlustemberg/Lazy-Loading-Tutorial]https://github.com/rlustemberg/Lazy-Loading-Tutorial)
+#### Reference
+The files for this article can be found at https://github.com/rlustemberg/Lazy-Loading-Tutorial
