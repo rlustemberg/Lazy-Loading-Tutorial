@@ -68,7 +68,7 @@ By the way, this is what `$.heavyController` is doing
 // Arguments passed into this controller can be accessed via the `$.args` object
 // directly or:
 const {args} = $, CryptoJS = require('/pbkdf2');
-(function constructor() {
+(function constructor(CryptoJS) {
 
   const salt = CryptoJS.lib.WordArray.random(128 / 8);
   console.debug('salt', salt.toString());
@@ -116,7 +116,7 @@ windowController1.js (and 2,3,4)
 ```javascript
 const {args} = $;
 let _heavyController;
-(function constructor() {
+(function constructor($,_heavyController) {
   $.actInd.show();
   Object.defineProperty($, 'heavyController', {
     get() {

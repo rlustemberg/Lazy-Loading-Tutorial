@@ -2,7 +2,7 @@
 // directly or:
 const {args} = $;
 let _heavyController;
-(function constructor() {
+(function constructor(_heavyController) {
   $.actInd.show();
   Object.defineProperty($, 'heavyController', {
     get() {
@@ -23,4 +23,7 @@ function openHandler() {
   _.delay(() => {
     $.heavyController.alert('Window 2');
   }, 0);
+}
+function cleanup(e) {
+  _heavyController = null;
 }

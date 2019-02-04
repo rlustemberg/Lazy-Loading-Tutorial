@@ -1,7 +1,7 @@
 // Arguments passed into this controller can be accessed via the `$.args` object
 // directly or:
 const {args} = $, CryptoJS = require('/pbkdf2');
-(function constructor() {
+(function constructor(CryptoJS) {
 
   const salt = CryptoJS.lib.WordArray.random(128 / 8);
   console.debug('salt', salt.toString());
