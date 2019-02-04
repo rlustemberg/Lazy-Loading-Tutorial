@@ -2,7 +2,7 @@
 // directly or:
 const {args} = $;
 let _heavyController;
-(function constructor(_heavyController) {
+(function constructor($, _heavyController) {
   $.actInd.show();
   Object.defineProperty($, 'heavyController', {
     get() {
@@ -17,7 +17,7 @@ let _heavyController;
       return _heavyController;
     }
   });
-})();
+})($, _heavyController);
 function openHandler() {
   //
   $.heavyController.alert(`Window 1 ${new Date().getTime() - Alloy.Globals.time.startup}`);

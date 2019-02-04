@@ -15,8 +15,8 @@ const {args} = $, CryptoJS = require('/pbkdf2');
       CryptoJS.PBKDF2("Secret Passphrase", salt, {keySize : 512 / 32, iterations : 30000});
   console.debug('key512Bits1000Iterations', key512Bits1000Iterations.toString());
   $.trigger('initialisation:ready');
-})();
+})(CryptoJS);
 function alert(message) {
-  console.log(message)
+  console.log(message);
 }
 exports.alert = alert;

@@ -82,7 +82,7 @@ const {args} = $, CryptoJS = require('/pbkdf2');
       CryptoJS.PBKDF2("Secret Passphrase", salt, {keySize : 512 / 32, iterations : 30000});
   console.debug('key512Bits1000Iterations', key512Bits1000Iterations.toString());
   $.trigger('initialisation:ready');
-})();
+})(CryptoJS);
 function alert(message) {
   console.log(message)
 }
@@ -131,7 +131,7 @@ let _heavyController;
       return _heavyController;
     }
   });
-})();
+})($,_heavyController);
 ```
 
 As you can see, the variable `_heavyController` is declared with a `null` value. In the self invoking 'constructor' function, we define a getter for the `$.heavyController` property, which invokes the Alloy controller factory method if `_heavyController` is null and assigning its output to `$.heavyController`.
